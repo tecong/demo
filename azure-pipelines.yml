@@ -22,3 +22,9 @@ steps:
     command: 'build'
     Dockerfile: '**/Dockerfile'
     arguments: '--build-arg JAR_FILE=target/*.jar'
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Teco demo env harbor'
+    repository: 'demo'
+    command: 'push'
