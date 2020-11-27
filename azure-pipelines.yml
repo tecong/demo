@@ -16,6 +16,7 @@ steps:
   displayName: 'Maven package'
 
 - task: Docker@2
+  displayName: 'Build container'
   inputs:
     containerRegistry: 'Teco demo env harbor'
     repository: 'demo/demo'
@@ -24,7 +25,18 @@ steps:
     arguments: '--build-arg JAR_FILE=target/*.jar'
 
 - task: Docker@2
+  displayName: 'Push container to harbor'
   inputs:
     containerRegistry: 'Teco demo env harbor'
     repository: 'demo/demo'
     command: 'push'
+
+- task: CmdLine@1
+  displayName: 'Set image version in deployment.yaml'
+  inputs:
+    filename: /bin/bash
+    arguments: '-c "awk ''{gsub(\"DEMO_IMAGE\", \"harbor.svc.tieto1.1-4.fi.teco.online/$(DockerImageName):$(Build.BuildId)\", $0); print}'' deployment.yaml > $(build.artifactstagingdirectory)/deployment.yaml"'
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifacts'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
