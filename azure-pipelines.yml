@@ -5,7 +5,7 @@
 
 trigger:
   branches:
-    - main
+    - master
 
 pool: 'Demo'
 
