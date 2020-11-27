@@ -35,7 +35,7 @@ steps:
   displayName: 'Set image version in deployment.yaml'
   inputs:
     filename: /bin/bash
-    arguments: '-c "awk ''{gsub(\"DEMO_IMAGE\", \"harbor.svc.tieto1.1-4.fi.teco.online/$(DockerImageName):$(Build.BuildId)\", $0); print}'' deployment.yaml > $(build.artifactstagingdirectory)/deployment.yaml"'
+    arguments: '-c "awk ''{gsub(\"DEMO_IMAGE\", \"harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$(Build.BuildId)\", $0); print}'' deployment.yaml > $(build.artifactstagingdirectory)/deployment.yaml"'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifacts'
   inputs:
