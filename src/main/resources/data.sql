@@ -1,13 +1,13 @@
-DROP TABLE IF EXISTS beers;
+DROP TABLE IF EXISTS cars;
 
-create table beers (
+create table cars (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    brewery VARCHAR(100) NOT NULL,
-    type VARCHAR(100) NOT NULL
+    model VARCHAR(100) NOT NULL,
+    make VARCHAR(100) NOT NULL,
+    year INT NOT NULL
 );
 
-INSERT INTO beers (name, brewery, type) VALUES
-    ('Special', 'Olvi', 'Lager'),
-    ('Sandels', 'Olvi', 'Lager'),
-    ('Iisalmi Pale Ale', 'Olvi', 'IPA');
+INSERT INTO cars (model, make, year) VALUES
+    ('A3', 'Audi', 2003),
+    ('X3', 'BMW', 2014),
+    ('2000 mk2', 'Triumph', 1970);

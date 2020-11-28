@@ -15,67 +15,67 @@ import org.springframework.web.bind.annotation.*;
 public class DemoController {
 
     @Autowired
-    BeerRepository beerRepository;
+    CarRepository carRepository;
 
-    @GetMapping("/beers")
-    public ResponseEntity<List<Beer>> getAllBeers(@RequestParam(required = false) String name) {
+    @GetMapping("/cars")
+    public ResponseEntity<List<Car>> getAllCars(@RequestParam(required = false) String model) {
         try {
-            List<Beer> beers = new ArrayList<Beer>();
-            if(name == null) {
-                beerRepository.findAll().forEach(beers::add);
+            List<Car> cars = new ArrayList<Car>();
+            if(model == null) {
+                carRepository.findAll().forEach(cars::add);
             } else {
-                beerRepository.findByNameContaining(name).forEach(beers::add);
+                carRepository.findByModelContaining(model).forEach(cars::add);
             }
-            if(beers.isEmpty()) {
+            if(cars.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(beers, HttpStatus.OK);
+            return new ResponseEntity<>(cars, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/beers/{id}")
-    public ResponseEntity<Beer> getBeerById(@PathVariable("id") long id) {
-        Optional<Beer> beerData = beerRepository.findById(id);
+    @GetMapping("/cars/{id}")
+    public ResponseEntity<Car> getCarById(@PathVariable("id") long id) {
+        Optional<Car> carData = carRepository.findById(id);
 
-        if(beerData.isPresent()) {
-            return new ResponseEntity<>(beerData.get(), HttpStatus.OK);
+        if(carData.isPresent()) {
+            return new ResponseEntity<>(carData.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @PostMapping("/beers")
-    public ResponseEntity<Beer> createBeer(@RequestBody Beer beer) {
+    @PostMapping("/cars")
+    public ResponseEntity<Car> createCar(@RequestBody Car car) {
         try {
-            Beer _beer = beerRepository.save(new Beer(beer.getName(), beer.getBrewery(), beer.getType()));
-            return new ResponseEntity<>(_beer, HttpStatus.CREATED);
+            Car _car = carRepository.save(new Car(car.getModel(), car.getMake(), car.getYear()));
+            return new ResponseEntity<>(_car, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/beers/{id}")
-    public ResponseEntity<Beer> updateBeer(@PathVariable("id") long id, @RequestBody Beer beer) {
-        Optional<Beer> beerData = beerRepository.findById(id);
+    @PutMapping("/cars/{id}")
+    public ResponseEntity<Car> updateCar(@PathVariable("id") long id, @RequestBody Car car) {
+        Optional<Car> carData = carRepository.findById(id);
 
-        if(beerData.isPresent()) {
-            Beer _beer = beerData.get();
-            _beer.setName(beer.getName());
-            _beer.setBrewery(beer.getBrewery());
-            _beer.setType(beer.getType());
-            return new ResponseEntity<>(beerRepository.save(_beer), HttpStatus.OK);
+        if(carData.isPresent()) {
+            Car _car = carData.get();
+            _car.setModel(car.getModel());
+            _car.setMake(car.getMake());
+            _car.setYear(car.getYear());
+            return new ResponseEntity<>(carRepository.save(_car), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @DeleteMapping("/beers/{id}")
+    @DeleteMapping("/cars/{id}")
     public ResponseEntity<HttpStatus> deleteBeer(@PathVariable("id") long id) {
         try {
-            beerRepository.deleteById(id);
+            carRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
