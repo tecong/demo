@@ -6,37 +6,44 @@
 trigger:
   - master
 
-pool: 'Demo'
+variables:
+  ACR.Name: '{{#toAlphaNumericString Demo dev registry 46}}{{/toAlphaNumericString}}{{#shortGuid}}{{/shortGuid}}'
 
-steps:
-- script: ./mvnw clean
-  displayName: 'Clean build env'
+jobs:
+  - job: A
+    pool:
+      vmImage: 'ubuntu-18.04'
+    steps:
+    - script: ./mvnw clean
+      displayName: 'Clean build env'
+    - script: ./mvnw package
+      displayName: 'Maven package'
 
-- script: ./mvnw package
-  displayName: 'Maven package'
+    - task: Docker@2
+      displayName: 'Build container'
+      inputs:
+        containerRegistry: 'Teco demo env harbor'
+        repository: 'demo'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        arguments: '--build-arg JAR_FILE=target/*.jar'
 
-- task: Docker@2
-  displayName: 'Build container'
-  inputs:
-    containerRegistry: 'Teco demo env harbor'
-    repository: 'demo/demo'
-    command: 'build'
-    Dockerfile: '**/Dockerfile'
-    arguments: '--build-arg JAR_FILE=target/*.jar'
-
-- task: Docker@2
-  displayName: 'Push container to harbor'
-  inputs:
-    containerRegistry: 'Teco demo env harbor'
-    repository: 'demo/demo'
-    command: 'push'
-
-- task: CmdLine@1
-  displayName: 'Set image version in deployment.yaml'
-  inputs:
-    filename: /bin/bash
-    arguments: '-c "awk ''{gsub(\"DEMO_IMAGE\", \"harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$(Build.BuildId)\", $0); print}'' deployment.yaml > $(build.artifactstagingdirectory)/deployment.yaml"'
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifacts'
-  inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
+    - task: Docker@2
+      displayName: 'Push container to harbor'
+      inputs:
+        containerRegistry: 'Teco demo env harbor'
+        repository: 'demo'
+        command: 'push'
+  - job: B
+    pool:
+      vmImage: 'ubuntu-18.04'
+    steps:
+    - task: CmdLine@1
+      displayName: 'Set image version in deployment.yaml'
+      inputs:
+        filename: /bin/bash
+        arguments: '-c "awk ''{gsub(\"DEMO_IMAGE\", \"harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$(Build.BuildId)\", $0); print}'' deployment.yaml > $(build.artifactstagingdirectory)/deployment.yaml"'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifacts'
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'
