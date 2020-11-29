@@ -7,7 +7,8 @@ trigger:
   - master
 
 variables:
-  ACR.Name: '{{#toAlphaNumericString DemoDevRegistry 46}}{{/toAlphaNumericString}}{{#shortGuid}}{{/shortGuid}}'
+  ACR.Name: 'demo2557dd8ec0'
+  ACR.FullName: 'demo2557dd8ec0.azurecr.io'
 
 jobs:
   - job: A
@@ -15,7 +16,7 @@ jobs:
     pool:
       name: 'DemoAzurePool'
     steps:
-    - script: echo $(ACR.Name)
+    - script: echo $(ACR.FullName)
     - script: ./mvnw clean
       displayName: 'Clean build env'
     - script: ./mvnw package
@@ -46,8 +47,8 @@ jobs:
       inputs:
         containerRegistry: 'DemoDevRegistry'
         command: 'login'
-    - script: docker pull $(ACR.Name)/demo:$(Build.BuildId)
-    - script: docker tag $(ACR.Name)/demo:$(Build.BuildId) harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$(Build.BuildId)
+    - script: docker pull $(ACR.FullName)/demo:$(Build.BuildId)
+    - script: docker tag $(ACR.FullName)/demo:$(Build.BuildId) harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$(Build.BuildId)
     - task: Docker@2
       inputs:
         containerRegistry: 'Teco demo env harbor'
