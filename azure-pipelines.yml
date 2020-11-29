@@ -61,10 +61,15 @@ jobs:
       name: 'DemoAzurePool'
     steps:
     - task: CmdLine@1
-      displayName: 'Set image version in deployment.yaml'
+      displayName: 'Set image version in dev deployment.yaml'
       inputs:
         filename: /bin/bash
-        arguments: '-c "awk ''{gsub(\"DEMO_IMAGE\", \"harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$(Build.BuildId)\", $0); print}'' deployment.yaml > $(build.artifactstagingdirectory)/deployment.yaml"'
+        arguments: '-c "awk ''{gsub(\"DEMO_IMAGE\", \"$(ACR.FullName)/demo:$(Build.BuildId)\", $0); print}'' deployment.yaml >  $(build.artifactstagingdirectory)/deployment-dev.yaml"'
+    - task: CmdLine@1
+      displayName: 'Set image version in prod deployment.yaml'
+      inputs:
+        filename: /bin/bash
+        arguments: '-c "awk ''{gsub(\"DEMO_IMAGE\", \"harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$(Build.BuildId)\", $0); print}'' deployment.yaml > $(build.artifactstagingdirectory)/deployment-prod.yaml"'
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifacts'
       inputs:
