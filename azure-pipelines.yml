@@ -12,12 +12,15 @@ variables:
 jobs:
   - job: A
     pool:
-      vmImage: 'ubuntu-18.04'
+      name: 'Demo azure'
+      vmImage: 'ubuntu-latest'
     steps:
+    - script: echo $ACR.name
     - script: ./mvnw clean
       displayName: 'Clean build env'
     - script: ./mvnw package
       displayName: 'Maven package'
+
 
     - task: Docker@2
       displayName: 'Build container'
@@ -36,7 +39,8 @@ jobs:
         command: 'push'
   - job: B
     pool:
-      vmImage: 'ubuntu-18.04'
+      name: 'Demo azure'
+      vmImage: 'ubuntu-latest'
     steps:
     - task: CmdLine@1
       displayName: 'Set image version in deployment.yaml'
