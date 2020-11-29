@@ -11,10 +11,11 @@ variables:
 
 jobs:
   - job: A
+    displayName: Build image and push to Azure registry
     pool:
       name: 'DemoAzurePool'
     steps:
-    - script: echo $ACR.name
+    - script: echo $(ACR.Name)
     - script: ./mvnw clean
       displayName: 'Clean build env'
     - script: ./mvnw package
@@ -37,6 +38,24 @@ jobs:
         repository: 'demo'
         command: 'push'
   - job: B
+    displayName: Upload image to prod registry
+    dependsOn: A
+    pool: Demo
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'DemoDevRegistry'
+        command: 'login'
+    - script: docker pull $(ACR.Name)/demo:$(Build.BuildId)
+    - script: docker tag $(ACR.Name)/demo:$(Build.BuildId) harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$(Build.BuildId)
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Teco demo env harbor'
+        repository: 'demo/demo'
+        command: 'push'
+  - job: C
+    displayName: Create and public artifacts
+    dependsOn: A
     pool:
       name: 'DemoAzurePool'
     steps:
