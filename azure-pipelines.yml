@@ -7,13 +7,12 @@ trigger:
   - master
 
 variables:
-  ACR.Name: '{{#toAlphaNumericString Demo dev registry 46}}{{/toAlphaNumericString}}{{#shortGuid}}{{/shortGuid}}'
+  ACR.Name: '{{#toAlphaNumericString DemoDevRegistry 46}}{{/toAlphaNumericString}}{{#shortGuid}}{{/shortGuid}}'
 
 jobs:
   - job: A
     pool:
-      name: 'Demo azure'
-      vmImage: 'ubuntu-latest'
+      name: 'DemoAzurePool'
     steps:
     - script: echo $ACR.name
     - script: ./mvnw clean
@@ -25,7 +24,7 @@ jobs:
     - task: Docker@2
       displayName: 'Build container'
       inputs:
-        containerRegistry: 'Teco demo env harbor'
+        containerRegistry: 'DemoDevRegistry'
         repository: 'demo'
         command: 'build'
         Dockerfile: '**/Dockerfile'
@@ -34,13 +33,12 @@ jobs:
     - task: Docker@2
       displayName: 'Push container to harbor'
       inputs:
-        containerRegistry: 'Teco demo env harbor'
+        containerRegistry: 'DemoDevRegistry'
         repository: 'demo'
         command: 'push'
   - job: B
     pool:
-      name: 'Demo azure'
-      vmImage: 'ubuntu-latest'
+      name: 'DemoAzurePool'
     steps:
     - task: CmdLine@1
       displayName: 'Set image version in deployment.yaml'
