@@ -33,7 +33,7 @@ jobs:
         arguments: '--build-arg JAR_FILE=target/*.jar'
 
     - task: Docker@2
-      displayName: 'Push container to harbor'
+      displayName: 'Push container to ACR'
       inputs:
         containerRegistry: 'DemoDevRegistry'
         repository: 'demo'
@@ -55,7 +55,7 @@ jobs:
         repository: 'demo/demo'
         command: 'push'
   - job: C
-    displayName: Create and public artifacts
+    displayName: Create and publish artifacts
     dependsOn: A
     pool:
       name: 'DemoAzurePool'
