@@ -29,7 +29,7 @@ public class DemoController {
 
     @GetMapping("/cars")
     public ResponseEntity<List<Car>> getAllCars(@RequestParam(required = false) String model) {
-        try {
+     /*   try {
             List<Car> cars = new ArrayList<Car>();
             if(model == null) {
                 carRepository.findAll().forEach(cars::add);
@@ -43,8 +43,8 @@ public class DemoController {
             return new ResponseEntity<>(cars, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-  
+        }*/
+        return null;
     }
 
     @GetMapping("/cars/{id}")
