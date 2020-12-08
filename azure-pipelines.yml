@@ -16,13 +16,33 @@ jobs:
     pool:
       name: 'DemoAzurePool'
     steps:
-    - script: echo $(ACR.FullName)
-    - script: ./mvnw clean
-      displayName: 'Clean build env'
-    - script: ./mvnw package
-      displayName: 'Maven package'
+#    - script: echo $(ACR.FullName)
+#    - script: ./mvnw clean
+#      displayName: 'Clean build env'
+#    - script: ./mvnw package
+#      displayName: 'Maven package'
+    - task: Maven@3
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'test'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
 
-
+    - task: Maven@3
+      inputs:
+        mavenPomFile: 'pom.xml'
+        options: '-DskipTests'
+        publishJUnitResults: false
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
     - task: Docker@2
       displayName: 'Build container'
       inputs:
