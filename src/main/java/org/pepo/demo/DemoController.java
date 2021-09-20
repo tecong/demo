@@ -83,7 +83,7 @@ public class DemoController {
     }
 
     @DeleteMapping("/cars/{id}")
-    public ResponseEntity<HttpStatus> deleteBeer(@PathVariable("id") long id) {
+    public ResponseEntity<HttpStatus> deleteCar(@PathVariable("id") long id) {
         try {
             carRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
