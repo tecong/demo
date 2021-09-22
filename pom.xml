@@ -10,12 +10,12 @@
 	</parent>
 	<groupId>org.pepo</groupId>
 	<artifactId>demo</artifactId>
-	<version>0.0.12</version>
+	<version>0.0.13</version>
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
-		<java.version>8</java.version>
+		<java.version>11</java.version>
 	</properties>
 
 	<dependencies>
