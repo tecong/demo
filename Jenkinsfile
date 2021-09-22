@@ -47,5 +47,18 @@ pipeline {
         }
     }
 
+    stage('update cd repo') {
+        steps {
+            withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                sh "rm -rf demo-cd"
+                sh "git clone https://github.com/tecong/demo-cd.git"
+                sh "cd demo-cd"
+                sh "sed -i bak 's/tag:.*/tag: $BUILD_NUMBER/g' demo-helm/values.yaml"
+                sh "git add demo-helm/values.yaml"
+                sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/tecong/demo-cd.git -m 'Tag updated to $BUILD_NUMBER'"
+            }
+        }
+    }
+
   }
 }
