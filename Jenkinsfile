@@ -29,7 +29,7 @@ pipeline {
 
     stage('build image') {
       steps {
-        sh 'docker build -t demo:${env.BUILD_NUMBER} -t demo:latest .'
+        sh 'docker build -t demo:${currentBuild.number} -t demo:latest .'
       }
     }
 
@@ -37,9 +37,9 @@ pipeline {
         steps {
             withCredentials([usernamePassword(credentialsId: 'tieto1harbor', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh "docker login -u '$USERNAME' -p $PASSWORD harbor.svc.tieto1.1-4.fi.teco.online"
-                        sh "docker tag demo:latest harbor.svc.tieto1.1-4.fi.teco.online:${env.BUILD_NUMBER}"
+                        sh "docker tag demo:latest harbor.svc.tieto1.1-4.fi.teco.online:${currentBuild.number}"
                         sh "docker tag demo:latest harbor.svc.tieto1.1-4.fi.teco.online:latest"
-                        sh "docker push harbor.svc.tieto1.1-4.fi.teco.online:${env.BUILD_NUMBER}"
+                        sh "docker push harbor.svc.tieto1.1-4.fi.teco.online:${currentBuild.number}"
                         sh "docker push harbor.svc.tieto1.1-4.fi.teco.online:latest"
             }
             sh "echo TAG=${env.BUILD_NUMBER} > build.properties"
