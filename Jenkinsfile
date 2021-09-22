@@ -31,7 +31,7 @@ pipeline {
 
     stage('build image') {
       steps {
-        sh 'docker build -t demo:latest -t $BUILD_NUMBER .'
+        sh 'docker build -t demo:latest -t demo:$BUILD_NUMBER .'
       }
     }
 
