@@ -37,8 +37,8 @@ pipeline {
         steps {
             withCredentials([usernamePassword(credentialsId: 'tieto1harbor', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh "docker login -u '$USERNAME' -p $PASSWORD harbor.svc.tieto1.1-4.fi.teco.online"
-                        sh "docker tag demo:latest harbor.svc.tieto1.1-4.fi.teco.online:latest"
-                        sh "docker push harbor.svc.tieto1.1-4.fi.teco.online:latest"
+                        sh "docker tag demo:latest harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:latest"
+                        sh "docker push harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:latest"
             }
         }
     }
