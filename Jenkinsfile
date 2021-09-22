@@ -4,6 +4,7 @@ pipeline {
     stage('check java') {
       steps {
         sh "echo $GIT_COMMIT"
+        sh "echo $BUILD_NUMBER"
         sh 'java -version'
       }
     }
