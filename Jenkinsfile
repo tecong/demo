@@ -55,7 +55,8 @@ pipeline {
                 sh "cd demo-cd"
                 sh "sed -i 's/tag:.*/tag: $BUILD_NUMBER/g' demo-helm/values.yaml"
                 sh "git add demo-helm/values.yaml"
-                sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/tecong/demo-cd.git -m 'Tag updated to $BUILD_NUMBER'"
+                sh "git commit -m 'Tag updated to $BUILD_NUMBER'"
+                sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/tecong/demo-cd.git"
             }
         }
     }
