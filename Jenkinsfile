@@ -50,7 +50,7 @@ pipeline {
 
     stage('call cd update') {
       steps {
-        sh 'curl -k http://10.195.220.2:8080/job/demo-cd/buildWithParameters?token=testitoken&remote_build_number=$BUILD_NUMBER'
+        sh 'curl -k http://10.195.220.2:8080/job/demo-cd/buildWithParameters?token=testitoken&REMOTE_BUILD_NUMBER=$BUILD_NUMBER'
       }
     }
 
