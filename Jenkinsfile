@@ -13,7 +13,7 @@ pipeline {
       steps {
         sh './mvnw clean'
         sh './mvnw org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version -l version.log'
-        sh 'echo "env.POM_VERSION=\"$(grep -v \'\\[\' version.log)\"" > props-properties.groovy'
+        sh 'echo "env.POM_VERSION=\\\"$(grep -v \'\\[\' version.log)\\\"" > props-properties.groovy'
         load 'props-properties.groovy'
       }
     }
