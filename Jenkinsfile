@@ -10,9 +10,9 @@ pipeline {
     }
 
     stage('cleanup') {
-        steps {
-            sh './mvnw clean'
-        }
+      steps {
+        sh './mvnw clean'
+      }
     }
 
     stage('unit tests') {
@@ -36,30 +36,22 @@ pipeline {
     }
 
     stage('push image') {
-        steps {
-            withCredentials([usernamePassword(credentialsId: 'tieto1harbor', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "docker login -u '$USERNAME' -p $PASSWORD harbor.svc.tieto1.1-4.fi.teco.online"
-                        sh "docker tag demo:$BUILD_NUMBER harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:latest"
-                        sh "docker tag demo:$BUILD_NUMBER harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$BUILD_NUMBER"
-                        sh "docker push harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:latest"
-                        sh "docker push harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$BUILD_NUMBER"
-            }
+      steps {
+        withCredentials(bindings: [usernamePassword(credentialsId: 'tieto1harbor', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+          sh "docker login -u '$USERNAME' -p $PASSWORD harbor.svc.tieto1.1-4.fi.teco.online"
+          sh "docker tag demo:$BUILD_NUMBER harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:latest"
+          sh "docker tag demo:$BUILD_NUMBER harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$BUILD_NUMBER"
+          sh 'docker push harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:latest'
+          sh "docker push harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$BUILD_NUMBER"
         }
+
+      }
     }
 
-    stage('update cd repo') {
-        steps {
-            withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                sh "cd /tmp"
-                sh "rm -rf demo-cd"
-                sh "git clone https://github.com/tecong/demo-cd.git"
-                sh "cd demo-cd"
-                sh "sed -i 's/tag:.*/tag: $BUILD_NUMBER/g' demo-helm/values.yaml"
-                sh "git add demo-helm/values.yaml"
-                sh "git commit -m 'Tag updated to $BUILD_NUMBER'"
-                sh "git push"
-            }
-        }
+    stage('call cd update') {
+      steps {
+        sh 'curl -k http://10.195.220.2:8080/job/demo-cd/buildWithParameters?token=testitoken&remote_build_number=$BUILD_NUMBER'
+      }
     }
 
   }
