@@ -3,6 +3,7 @@ package org.pepo.demo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
@@ -23,14 +24,26 @@ public class DemoController {
 
     @GetMapping("/version")
     public ResponseEntity<BuildProperties> getVersion() {
-        ResponseEntity<BuildProperties> _response = new ResponseEntity<BuildProperties>(buildProperties, HttpStatus.OK);
+        ResponseEntity<BuildProperties> _response = new ResponseEntity<>(buildProperties, HttpStatus.OK);
+        return _response;
+    }
+
+    @GetMapping("/calculate")
+    public ResponseEntity<Integer> getCalculation() {
+        Random ran = new Random();
+        int x = ran.nextInt(1000000) + 1000000;
+        int i=0;
+        for (i=0;i<x;i++) {
+            //
+        }
+        ResponseEntity<Integer> _response = new ResponseEntity<>(Integer.valueOf(i), HttpStatus.OK);
         return _response;
     }
 
     @GetMapping("/cars")
     public ResponseEntity<List<Car>> getAllCars(@RequestParam(required = false) String model) {
         try {
-            List<Car> cars = new ArrayList<Car>();
+            List<Car> cars = new ArrayList<>();
             if(model == null) {
                 carRepository.findAll().forEach(cars::add);
             } else {
