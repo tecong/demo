@@ -54,7 +54,7 @@ pipeline {
 
     stage('call cd update') {
       steps {
-        sh 'curl -I "http://jenkins.svc.dev.teco.tieto1.1-4.fi.teco.online:8080/job/demo-cd/buildWithParameters?token=testitoken&REMOTE_BUILD_NUMBER=$BUILD_NUMBER"'
+        sh 'curl -I "http://jenkins.svc.dev.teco.tieto1.1-4.fi.teco.online:8080/job/demo-cd/buildWithParameters?token=testitoken&REMOTE_BUILD_NUMBER=$BUILD_NUMBER&POM_VERSION=$POM_VERSION"'
       }
     }
 
