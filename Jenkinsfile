@@ -47,6 +47,7 @@ pipeline {
           sh "docker tag demo:$BUILD_NUMBER harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$BUILD_NUMBER"
           sh 'docker push harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:latest'
           sh "docker push harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$BUILD_NUMBER"
+          sh "docker rmi harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:$BUILD_NUMBER demo:$BUILD_NUMBER demo:latest harbor.svc.tieto1.1-4.fi.teco.online/demo/demo:latest"
         }
 
       }
