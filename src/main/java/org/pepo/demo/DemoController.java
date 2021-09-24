@@ -28,7 +28,7 @@ public class DemoController {
     @GetMapping("/calculate")
     public ResponseEntity<Double> getCalculation() {
         Random ran = new Random();
-        int x = ran.nextInt(1000000) + 1000000;
+        int x = ran.nextInt(1000000000) + 1000000000;
         int i=0;
         double y=0;
         for (i=0;i<x;i++) {
