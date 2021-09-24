@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/api")
+@Scope("request")
 public class DemoController {
 
     @Autowired
@@ -28,7 +30,7 @@ public class DemoController {
     @GetMapping("/calculate")
     public ResponseEntity<Double> getCalculation() {
         Random ran = new Random();
-        int x = ran.nextInt(1000000000) + 1000000000;
+        int x = ran.nextInt(100000000) + 100000000;
         int i=0;
         double y=0;
         for (i=0;i<x;i++) {
