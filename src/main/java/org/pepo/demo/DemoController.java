@@ -34,7 +34,7 @@ public class DemoController {
         int i=0;
         double y=0;
         for (i=0;i<x;i++) {
-            y+=Math.sqrt(i);
+            y+=Math.sqrt(i)+1.0;
         }
         ResponseEntity<Double> _response = new ResponseEntity<>(y, HttpStatus.OK);
         return _response;
